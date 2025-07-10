@@ -9,20 +9,38 @@ const PORT = 8000
 app.use(express.json())
 app.use(express.urlencoded(true))
 
-app.post('/signup',async(req,res) =>{
-    const user = new User(req.body)
+app.get('/feed', async (req, res) => {
     try {
-      await user.save()
-      console.log('Registration Sucessfull')
-      res.status(200).json({
-        sucess:true,
-        message:'Registration sucessfull'
-      })  
+        const users = await User.find()
+        res.status(200).json({
+            sucess: true,
+            data: users
+        })
     } catch (error) {
         res.status(400).json({
-            sucess:false,
-            message:'Not able to register'
-        })}
+            sucess: false,
+            message: error.message
+        })
+
+        console.log(error)
+    }
+})
+
+app.post('/signup', async (req, res) => {
+    const user = new User(req.body)
+    try {
+        await user.save()
+        console.log('Registration Sucessfull')
+        res.status(200).json({
+            sucess: true,
+            message: 'Registration sucessfull'
+        })
+    } catch (error) {
+        res.status(400).json({
+            sucess: false,
+            message: 'Not able to register'
+        })
+    }
 })
 
 
@@ -32,6 +50,6 @@ connectDB().then(() => {
         console.log("Server is Running")
     })
 })
-.catch((err)=>{
- console.log("Error: "+ err)
-})
+    .catch((err) => {
+        console.log("Error: " + err)
+    })
