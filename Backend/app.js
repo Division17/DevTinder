@@ -78,7 +78,7 @@ app.patch('/user', async (req, res) => {
             message: 'User updated sucessfully'
         })
     } catch (error) {
-        res.status(400).send("Error in updating" + error.message)
+        res.status(400).send("Error in updating " + error.message)
         console.log(error)
     }
 })
