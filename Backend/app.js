@@ -1,6 +1,7 @@
 const express = require('express');
 const { connectDB } = require('./src/configs/database.js')
 const User = require('./src/models/users.model.js')
+const { validateSignUp } = require('./src/utility/signUpValidation.js')
 
 const app = express()
 
@@ -27,8 +28,12 @@ app.get('/feed', async (req, res) => {
 })
 
 app.post('/signup', async (req, res) => {
-    const user = new User(req.body)
+
     try {
+
+        validateSignUp(req)
+
+        const user = new User(req.body)
         await user.save()
         console.log('Registration Sucessfull')
         res.status(200).json({
@@ -64,12 +69,12 @@ app.patch('/user', async (req, res) => {
         const allowed_updates = ["photoUrl", "about", "age", "gender", "skills"]
 
         const isUpdateAllowed = Object.keys(data).every((k) => allowed_updates.includes(k))
-        
-        if(!isUpdateAllowed){
+
+        if (!isUpdateAllowed) {
             throw new Error("Update is not allowed")
         }
-       
-        if(data.skills.length > 10){
+
+        if (data.skills.length > 10) {
             throw new Error("Skills can not be more than 10")
         }
         await User.findByIdAndUpdate(userId, data, { runValidators: true })
