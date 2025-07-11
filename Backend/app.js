@@ -38,7 +38,7 @@ app.post('/signup', async (req, res) => {
     } catch (error) {
         res.status(400).json({
             sucess: false,
-            message: 'Not able to register'
+            message: error.message
         })
     }
 })
@@ -50,7 +50,7 @@ app.delete("/user", async (req, res) => {
         res.status(200).json({
             success: true,
             message: 'User deleted sucessfully',
-            data:user
+            data: user
         })
     } catch (error) {
         res.status(400).send("Something went wrong")
@@ -61,13 +61,24 @@ app.patch('/user', async (req, res) => {
     const data = req.body;
     const userId = data.userId;
     try {
-        await User.findByIdAndUpdate(userId , data, {returnDocument:"after"})
+        const allowed_updates = ["photoUrl", "about", "age", "gender", "skills"]
+
+        const isUpdateAllowed = Object.keys(data).every((k) => allowed_updates.includes(k))
+        
+        if(!isUpdateAllowed){
+            throw new Error("Update is not allowed")
+        }
+       
+        if(data.skills.length > 10){
+            throw new Error("Skills can not be more than 10")
+        }
+        await User.findByIdAndUpdate(userId, data, { runValidators: true })
         res.status(200).json({
             success: true,
             message: 'User updated sucessfully'
         })
     } catch (error) {
-        res.status(400).send("Something went wrong")
+        res.status(400).send("Error in updating" + error.message)
         console.log(error)
     }
 })
