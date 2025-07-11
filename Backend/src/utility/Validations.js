@@ -20,10 +20,19 @@ const validateSignUp = (req) => {
     else if (!validator.isURL(photoUrl)) {
         throw new Error("Photo url is not a valid Url.")
     }
-
-
 }
 
+const validateLogin = (req) => {
+    const {emailId} = req.body;
+
+    if(!validator.isEmail(emailId)){
+        throw new Error(emailId, " is not a valid email.")
+    }
+}
+
+
+
 module.exports = {
-    validateSignUp
+    validateSignUp,
+    validateLogin
 }

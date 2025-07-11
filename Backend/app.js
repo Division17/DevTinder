@@ -1,7 +1,7 @@
 const express = require('express');
 const { connectDB } = require('./src/configs/database.js')
 const User = require('./src/models/users.model.js')
-const { validateSignUp } = require('./src/utility/signUpValidation.js')
+const { validateSignUp, validateLogin } = require('./src/utility/Validations.js')
 const bcrypt = require('bcryptjs')
 
 const app = express()
@@ -32,7 +32,7 @@ app.post('/signup', async (req, res) => {
     console.log(req.body)
     try {
         validateSignUp(req)
-        const{ firstName, lastName, emailId, password, age, skills, about, photoUrl} = req.body
+        const { firstName, lastName, emailId, password, age, skills, about, photoUrl } = req.body
         const hashPassword = await bcrypt.hash(password, 10)
         const user = new User({
             firstName,
@@ -42,7 +42,7 @@ app.post('/signup', async (req, res) => {
             skills,
             about,
             photoUrl,
-            password:hashPassword
+            password: hashPassword
         })
         await user.save()
         console.log('Registration Sucessfull')
@@ -57,6 +57,40 @@ app.post('/signup', async (req, res) => {
         })
 
         console.log(error)
+    }
+})
+
+app.post('/login', async (req, res) => {
+    try {
+        validateLogin(req)
+        const { emailId, password } = req.body;
+
+        const user = await User.findOne({emailId})
+        if (!user) {
+            res.status(400).json({
+                success: false,
+                message: 'credentials are wrong.'
+            })
+        }
+
+        const checkPassword = await bcrypt.compare(password, user.password)
+        if (!checkPassword) {
+            res.status(400).json({
+                success: false,
+                message: 'credentials are wrong.'
+            })
+        }
+
+        res.status(200).json({
+            success:true,
+            message:'Login successful'
+        })
+
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: error.message
+        })
     }
 })
 
