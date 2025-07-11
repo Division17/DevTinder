@@ -2,6 +2,7 @@ const express = require('express');
 const { connectDB } = require('./src/configs/database.js')
 const User = require('./src/models/users.model.js')
 const { validateSignUp } = require('./src/utility/signUpValidation.js')
+const bcrypt = require('bcryptjs')
 
 const app = express()
 
@@ -28,12 +29,21 @@ app.get('/feed', async (req, res) => {
 })
 
 app.post('/signup', async (req, res) => {
-
+    console.log(req.body)
     try {
-
         validateSignUp(req)
-
-        const user = new User(req.body)
+        const{ firstName, lastName, emailId, password, age, skills, about, photoUrl} = req.body
+        const hashPassword = await bcrypt.hash(password, 10)
+        const user = new User({
+            firstName,
+            lastName,
+            emailId,
+            age,
+            skills,
+            about,
+            photoUrl,
+            password:hashPassword
+        })
         await user.save()
         console.log('Registration Sucessfull')
         res.status(200).json({
@@ -45,6 +55,8 @@ app.post('/signup', async (req, res) => {
             sucess: false,
             message: error.message
         })
+
+        console.log(error)
     }
 })
 
