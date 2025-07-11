@@ -43,6 +43,20 @@ app.post('/signup', async (req, res) => {
     }
 })
 
+app.delete("/user", async (req, res) => {
+    const userId = req.body.userId;
+    try {
+        const user = await User.findByIdAndDelete({ _id: userId });
+        res.status(200).json({
+            success:true,
+            message:'User deleted sucessfully'
+        })
+    } catch (error) {
+     res.status(400).send("Something went wrong")
+    }
+})
+
+
 
 connectDB().then(() => {
     console.log('Connection Establisher')
