@@ -23,16 +23,22 @@ const validateSignUp = (req) => {
 }
 
 const validateLogin = (req) => {
-    const {emailId} = req.body;
+    const { emailId } = req.body;
 
-    if(!validator.isEmail(emailId)){
+    if (!validator.isEmail(emailId)) {
         throw new Error(emailId, " is not a valid email.")
     }
 }
 
+const validateProfileEdit = (req) => {
+const allowedFields = ["firstName", "lastName", "about", "name", "gender","skills", "photoUrl", "age"]
+const isFieldValid = Object.keys(req.body).every((k)=>allowedFields.includes(k))
+return isFieldValid
 
+}
 
 module.exports = {
     validateSignUp,
-    validateLogin
+    validateLogin,
+    validateProfileEdit
 }

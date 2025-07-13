@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs')
 
 const userSchema = new mongoose.Schema({
     firstName: {
@@ -50,7 +52,7 @@ const userSchema = new mongoose.Schema({
         default: 'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/626fd8140423801.6241b91e24d9c.png',
         validate(value) {
             if (!validator.isURL(value)) {
-               throw new Error("Photo URL is not valid")
+                throw new Error("Photo URL is not valid")
             }
         }
     },
@@ -66,6 +68,24 @@ const userSchema = new mongoose.Schema({
     {
         timestamps: true
     })
+
+userSchema.methods.getJWT = async function () {
+    const user = this;
+
+    const token = await jwt.sign({ _id: user._id }, "secrect key 123321", { expiresIn:'8d'})
+    return token;
+}
+
+
+userSchema.methods.validatePassword = async function (passwordInputByUser){
+    const user = this;
+    const passwordHash = user.password;
+
+    const isPasswordValid = await bcrypt.compare(
+        passwordInputByUser, passwordHash
+    )
+    return isPasswordValid
+}
 
 module.exports = mongoose.model('User', userSchema)
 
