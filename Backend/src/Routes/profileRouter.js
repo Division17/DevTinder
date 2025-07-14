@@ -2,7 +2,8 @@ const express = require('express')
 const User = require('../models/users.model.js')
 const jwt = require('jsonwebtoken')
 const { userAuth } = require('../middlewares/Auth.js')
-const { validateProfileEdit } = require('../utility/Validations.js')
+const { validateProfileEdit, validateNewPassword } = require('../utility/Validations.js')
+const bcrypt = require('bcryptjs')
 
 const profileRouter = express.Router()
 
@@ -54,6 +55,42 @@ profileRouter.patch('/profile/edit', userAuth, async (req, res) => {
             message: error.message
         })
     }
+})
+
+profileRouter.patch('/profile/password', userAuth, async (req, res) => {
+    try {
+        const { password, newPassword, confirmPassword } = req.body;
+
+        const loggedInUser = req.user;
+        const comparePassword = await bcrypt.compare(password, loggedInUser.password)
+        if (!comparePassword) {
+            throw new Error('Current password do not mtach')
+        }
+        if (newPassword !== confirmPassword) {
+            throw new Error("New Password and Confirm Password do not Match.")
+        }
+
+        validateNewPassword(newPassword)
+
+        const hashPassword = await bcrypt.hash(newPassword, 10);
+        loggedInUser.password = hashPassword;
+
+        await loggedInUser.save()
+
+        res.status(200).json({
+            success: true,
+            message: 'Password changes successfully.'
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({
+            success: false,
+            message: error.message
+        })
+    }
+
+
 })
 
 module.exports = {
