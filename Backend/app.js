@@ -6,6 +6,7 @@ const { userAuth } = require('./src/middlewares/Auth.js')
 const { authRouter } = require('./src/Routes/authRoutes.js')
 const { profileRouter } = require('./src/Routes/profileRouter.js')
 const { requestRouter} = require('./src/Routes/requests.js')
+const { userRouter } = require('./src/Routes/userRouter.js')
 
 const app = express()
 const PORT = 8000
@@ -17,6 +18,7 @@ app.use(cookieParser())
 app.use('/', authRouter)
 app.use('/', profileRouter)
 app.use('/', requestRouter)
+app.use('/', userRouter)
 
 app.get('/feed', userAuth, async (req, res) => {
     try {
