@@ -20,22 +20,6 @@ app.use('/', profileRouter)
 app.use('/', requestRouter)
 app.use('/', userRouter)
 
-app.get('/feed', userAuth, async (req, res) => {
-    try {
-        const users = await User.find()
-        res.status(200).json({
-            sucess: true,
-            data: users
-        })
-    } catch (error) {
-        res.status(400).json({
-            sucess: false,
-            message: error.message
-        })
-
-        console.log(error)
-    }
-})
 
 app.delete("/user", userAuth, async (req, res) => {
     const userId = req.body.userId;
