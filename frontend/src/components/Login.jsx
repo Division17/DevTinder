@@ -3,6 +3,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../store/UserSlice";
 import { useNavigate } from 'react-router-dom'
+import { URI } from "../utils/Constants";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -23,7 +24,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const resp = await axios.post("http://localhost:8000/login", formData, {
+      const resp = await axios.post(`${URI}/login`, formData, {
         withCredentials: true,
       });
       dispatch(addUser(resp.data.data))
