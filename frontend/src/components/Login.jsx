@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../store/UserSlice";
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ const Login = () => {
   });
 
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,8 +26,8 @@ const Login = () => {
       const resp = await axios.post("http://localhost:8000/login", formData, {
         withCredentials: true,
       });
-       dispatch(addUser(resp.data.data))
-      console.log(resp);
+      dispatch(addUser(resp.data.data))
+      return navigate('/')
     } catch (error) {
       console.log(error);
     }
