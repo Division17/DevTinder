@@ -7,10 +7,15 @@ const { authRouter } = require('./src/Routes/authRoutes.js')
 const { profileRouter } = require('./src/Routes/profileRouter.js')
 const { requestRouter} = require('./src/Routes/requests.js')
 const { userRouter } = require('./src/Routes/userRouter.js')
+const cors = require('cors')
 
 const app = express()
 const PORT = 8000
 
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials:true
+}))
 app.use(express.json())
 app.use(express.urlencoded(true))
 app.use(cookieParser())
