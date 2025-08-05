@@ -11,6 +11,8 @@ const Login = () => {
     password: "",
   });
 
+  const [errorMessage, setErrorMessage] = useState('')
+
   const dispatch = useDispatch();
   const navigate = useNavigate()
 
@@ -31,6 +33,7 @@ const Login = () => {
       navigate('/')
     } catch (error) {
       console.log(error);
+      setErrorMessage(error?.response?.data?.message || "Something went Wrong.")
     }
   };
 
@@ -60,6 +63,11 @@ const Login = () => {
               onChange={handleChange}
             />
           </div>
+          {
+            errorMessage && (
+              <p className="text-red-700 font-bold">{errorMessage}</p>
+            )
+          }
           <div className="card-actions flex justify-center items-center">
             <button className="btn btn-primary" onClick={handleLogin}>
               Login
