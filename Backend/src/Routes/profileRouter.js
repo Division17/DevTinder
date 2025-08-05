@@ -7,7 +7,7 @@ const bcrypt = require('bcryptjs')
 
 const profileRouter = express.Router()
 
-profileRouter.get('/profile', userAuth, async (req, res) => {
+profileRouter.get('/profile/view', userAuth, async (req, res) => {
     try {
         const token = req.cookies.token
         if (!token) {
@@ -27,7 +27,7 @@ profileRouter.get('/profile', userAuth, async (req, res) => {
         }
     } catch (error) {
         console.log(error)
-        res.status(400).json({
+        res.status(401).json({
             success: false,
             message: error
         })
