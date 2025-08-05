@@ -1,7 +1,23 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { removeRequests } from "../store/RequestsSlice";
+import axios from "axios";
+import { URI } from "../utils/Constants";
 
 const RequestCard = ({ details }) => {
-  const { firstName, lastName, age, photoUrl,about } = details;
+  const dispatch = useDispatch()
+  const { firstName, lastName, age, photoUrl, about } = details.fromUserId;
+
+  const handleRequest = async (status,id) => {
+    try {
+      const response = await axios.post(`${URI}/request/review/${status}/${id}`,{},{withCredentials:true});
+      console.log(response)
+      dispatch(removeRequests(id))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+ 
   return (
     <div className="card card-side bg-base-300 shadow-sm h-50 w-auto">
       <figure>
@@ -18,8 +34,22 @@ const RequestCard = ({ details }) => {
         <p>{age}</p>
         <p>{about}</p>
         <div className="flex card-actions justify-center">
-          <button className="btn btn-primary">Primary</button>
-          <button className="btn btn-secondary">Secondary</button>
+          <button
+            className="btn btn-primary"
+            onClick={() => {
+              handleRequest("ignored", details._id);
+            }}
+          >
+            Ignore
+          </button>
+          <button
+            className="btn btn-secondary"
+            onClick={() => {
+              handleRequest("accepted", details._id);
+            }}
+          >
+            Accept
+          </button>
         </div>
       </div>
     </div>

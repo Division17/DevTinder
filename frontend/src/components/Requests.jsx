@@ -15,7 +15,6 @@ const Requests = () => {
         withCredentials: true,
       });
       dispatch(addRequests(response?.data?.requests));
-      console.log(response.data.requests)
     } catch (error) {
       console.log(error);
     }
@@ -35,10 +34,10 @@ const Requests = () => {
   ) : (
     <div className="flex justify-center m-10 flex-col items-center">
       <h2 className="text-2xl font-bold"> Requests </h2>
-      <div className="mt-10">
+      <div className="mt-10 flex flex-col justify-center items-center gap-8">
         {requests &&
           requests.map((card) => (
-            <RequestsCard key={card._id} details={card.fromUserId} />
+            <RequestsCard key={card._id} details={card} />
           ))}
       </div>
     </div>
