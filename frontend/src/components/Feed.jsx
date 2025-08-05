@@ -32,7 +32,7 @@ const Feed = () => {
 
   return (
     <div className="flex items-center justify-center w-screen h-auto py-10">
-      {feed && <UserFeedCard feed={feed} />}
+      {feed && <UserFeedCard feed={feed[0]} />}
       {errorMessage && (
         <h2 className="text-red-500 font-bold text-xl">{errorMessage}</h2>
       )}
