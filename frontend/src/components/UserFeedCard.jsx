@@ -1,10 +1,38 @@
 import React from "react";
+import axios from 'axios';
+import { useDispatch } from 'react-redux'
+import { removeFeed } from '../store/FeedSlice'
+import {URI} from '../utils/Constants'
 
-const UserFeedCard = ({ feed }) => {
+const UserFeedCard = ({ feed}) => {
+  const dispatch = useDispatch()
 
-  
+    
+    if (!feed || feed.length <=0) {
+      return (
+        <div className=" w-screen m-10 flex justify-center items-center">
+          <h2 className="font-bold text-2xl">No feed left to show.......</h2>
+        </div>
+      );
+    }
 
-  const { firstName, lastName, photoUrl, age, about, gender } = feed;
+
+
+  const { _id, firstName, lastName, photoUrl, age, about, gender } = feed;
+
+  const handleFeed = async(status,id) => {
+    try {
+       await axios.post(
+        `${URI}/request/${status}/${id}`,
+        {},
+        { withCredentials: true }
+      );
+      dispatch(removeFeed(id))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
  return (
     <div className="card bg-base-300 w-96 shadow-sm">
       <figure>
@@ -24,8 +52,8 @@ const UserFeedCard = ({ feed }) => {
         </p>
         <p>{about}</p>
         <div className="card-actions justify-center gap-8">
-          <button className="btn btn-primary">Ignore</button>
-          <button className="btn btn-secondary">Interested</button>
+          <button className="btn btn-primary" onClick={()=>{handleFeed("ignored",_id)}}>Ignore</button>
+          <button className="btn btn-secondary" onClick={()=>{handleFeed("interested",_id)}}>Interested</button>
         </div>
       </div>
     </div>

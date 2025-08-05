@@ -34,7 +34,7 @@ const Connections = () => {
   ) : (
     <div className="flex justify-center m-10 flex-col items-center">
       <h2 className="text-2xl font-bold"> Connections</h2>
-              <div className="mt-10">{
+              <div className="mt-10 flex flex-col gap-4 justify-center">{
                   connection && (
                       connection.map(card => <ConnectionCard key={card._id} details={card } />) 
                   )

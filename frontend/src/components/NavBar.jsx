@@ -1,6 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeUser } from "../store/UserSlice";
+import { removeAllFeed } from "../store/FeedSlice";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { URI } from '../utils/Constants'
@@ -14,6 +15,7 @@ const NavBar = () => {
     try {
       await axios.post(`${URI}/logout`, {}, { withCredentials: true });
       dispatch(removeUser());
+      dispatch(removeAllFeed())
       navigate("/login");
     } catch (error) {
       console.log(error)
