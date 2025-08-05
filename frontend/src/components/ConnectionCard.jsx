@@ -1,7 +1,6 @@
 import React from "react";
 
 const ConnectionCard = ({ details }) => {
-  console.log(details);
   const { firstName, lastName, age, photoUrl,about } = details;
   return (
     <div className="card card-side bg-base-300 shadow-sm h-40 w-auto">
