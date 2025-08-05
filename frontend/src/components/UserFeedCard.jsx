@@ -2,9 +2,10 @@ import React from "react";
 
 const UserFeedCard = ({ feed }) => {
 
-  const { firstName, lastName, photoUrl, age, about, gender } = feed;
+  
 
-  return (
+  const { firstName, lastName, photoUrl, age, about, gender } = feed;
+ return (
     <div className="card bg-base-300 w-96 shadow-sm">
       <figure>
         <img
