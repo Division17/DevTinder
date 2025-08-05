@@ -4,7 +4,7 @@ const { userAuth } = require('../middlewares/Auth.js');
 const userRouter = express.Router();
 const User = require('../models/users.model.js')
 
-const userSafeFeilds = "firstName lastName age gender skills about";
+const userSafeFeilds = "firstName lastName age gender about photoUrl";
 
 userRouter.get('/user/requests/received', userAuth, async (req, res) => {
     try {
