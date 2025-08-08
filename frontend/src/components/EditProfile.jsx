@@ -23,8 +23,8 @@ const EditProfile = ({ user }) => {
       setFormData({
         firstName: user.firstName,
         lastName: user.lastName,
-        age: user.age,
-        gender: user.gender,
+        age: user.age || "",
+        gender: user.gender || "",
         about: user.about,
         photoUrl: user.photoUrl,
       });
