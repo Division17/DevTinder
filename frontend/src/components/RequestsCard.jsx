@@ -11,7 +11,6 @@ const RequestCard = ({ details }) => {
   const handleRequest = async (status,id) => {
     try {
       const response = await axios.post(`${URI}/request/review/${status}/${id}`,{},{withCredentials:true});
-      console.log(response)
       dispatch(removeRequests(id))
     } catch (error) {
       console.log(error)

@@ -1,15 +1,20 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { addRequests } from "../store/RequestsSlice"
+import { addRequests, removeRequests } from "../store/RequestsSlice"
 import { URI } from "../utils/Constants";
 import RequestsCard from './RequestsCard'
 
 const Requests = () => {
   const dispatch = useDispatch();
+  dispatch(removeRequests());
   const requests = useSelector((store) => store.requests);
+  console.log(requests)
+    useEffect(() => {
+      if (!requests) fetchConnections();
+    }, []);
+  
   const fetchConnections = async () => {
-    if (requests) return;
     try {
       const response = await axios.get(`${URI}/user/requests/received`, {
         withCredentials: true,
@@ -20,9 +25,7 @@ const Requests = () => {
     }
   };
 
-  useEffect(() => {
-    fetchConnections();
-  }, []);
+
 
   return !requests ? (
     <div className="flex justify-center m-10 flex-col items-center">

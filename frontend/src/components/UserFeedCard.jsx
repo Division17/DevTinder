@@ -34,9 +34,10 @@ const UserFeedCard = ({ feed}) => {
   }
 
  return (
-    <div className="card bg-base-300 w-96 shadow-sm">
+    <div className="card bg-base-300 w-96 shadow-sm ">
       <figure>
-        <img
+       <img
+         className="w-96 h-105 bg-cover"
           src={
             photoUrl ||
             "https://tse3.mm.bing.net/th/id/OIP.UCL14P68pN74fd8s7TLgZwAAAA?rs=1&pid=ImgDetMain&o=7&rm=3"
